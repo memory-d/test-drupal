@@ -5,12 +5,14 @@
  * PHP version 5
  *
  * @category  PHP
- * @package   PHP_CodeSniffer
+ *
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
+ *
  * @version   CVS: $Id: ScopeClosingBraceSniff.php,v 1.10 2008/12/08 05:59:29 squiz Exp $
+ *
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -20,18 +22,18 @@
  * Checks that the closing braces of scopes are aligned correctly.
  *
  * @category  PHP
- * @package   PHP_CodeSniffer
+ *
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
+ *
  * @version   Release: 1.2.0RC3
+ *
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class Drupal_Sniffs_WhiteSpace_ScopeClosingBraceSniff implements PHP_CodeSniffer_Sniff
 {
-
-
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -40,9 +42,9 @@ class Drupal_Sniffs_WhiteSpace_ScopeClosingBraceSniff implements PHP_CodeSniffer
     public function register()
     {
         return PHP_CodeSniffer_Tokens::$scopeOpeners;
+    }
 
-    }//end register()
-
+//end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -76,20 +78,20 @@ class Drupal_Sniffs_WhiteSpace_ScopeClosingBraceSniff implements PHP_CodeSniffer
 
         // We found a new line, now go forward and find the first non-whitespace
         // token.
-        $lineStart= $phpcsFile->findNext(
-            array(T_WHITESPACE),
+        $lineStart = $phpcsFile->findNext(
+            [T_WHITESPACE],
             ($lineStart + 1),
             null,
             true
         );
 
         $startColumn = $tokens[$lineStart]['column'];
-        $scopeStart  = $tokens[$stackPtr]['scope_opener'];
-        $scopeEnd    = $tokens[$stackPtr]['scope_closer'];
+        $scopeStart = $tokens[$stackPtr]['scope_opener'];
+        $scopeEnd = $tokens[$stackPtr]['scope_closer'];
 
         // Check that the closing brace is on it's own line.
         $lastContent = $phpcsFile->findPrevious(
-            array(T_WHITESPACE),
+            [T_WHITESPACE],
             ($scopeEnd - 1),
             $scopeStart,
             true
@@ -98,13 +100,14 @@ class Drupal_Sniffs_WhiteSpace_ScopeClosingBraceSniff implements PHP_CodeSniffer
         if ($tokens[$lastContent]['line'] === $tokens[$scopeEnd]['line']) {
             $error = 'Closing brace must be on a line by itself';
             $phpcsFile->addError($error, $scopeEnd);
+
             return;
         }
 
         // Check now that the closing brace is lined up correctly.
-        $braceIndent   = $tokens[$scopeEnd]['column'];
+        $braceIndent = $tokens[$scopeEnd]['column'];
         $isBreakCloser = ($tokens[$scopeEnd]['code'] === T_BREAK);
-        if (in_array($tokens[$stackPtr]['code'], array(T_CASE, T_DEFAULT)) === true
+        if (in_array($tokens[$stackPtr]['code'], [T_CASE, T_DEFAULT]) === true
             && $isBreakCloser === true
         ) {
             // BREAK statements should be indented 4 spaces from the
@@ -119,10 +122,7 @@ class Drupal_Sniffs_WhiteSpace_ScopeClosingBraceSniff implements PHP_CodeSniffer
                 $phpcsFile->addError($error, $scopeEnd);
             }
         }
+    }
 
-    }//end process()
-
-
+//end process()
 }//end class
-
-?>

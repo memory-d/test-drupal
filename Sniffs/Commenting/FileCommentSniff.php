@@ -5,15 +5,16 @@
  * PHP version 5
  *
  * @category  PHP
- * @package   PHP_CodeSniffer
+ *
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
+ *
  * @version   CVS: $Id: FileCommentSniff.php,v 1.32 2009/02/10 06:01:46 squiz Exp $
+ *
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
-
 if (class_exists('PHP_CodeSniffer_CommentParser_ClassCommentParser', true) === false) {
     throw new PHP_CodeSniffer_Exception('Class PHP_CodeSniffer_CommentParser_ClassCommentParser not found');
 }
@@ -34,18 +35,18 @@ if (class_exists('PHP_CodeSniffer_CommentParser_ClassCommentParser', true) === f
  * </ul>
  *
  * @category  PHP
- * @package   PHP_CodeSniffer
+ *
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
+ *
  * @version   Release: 1.2.0RC3
+ *
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
-
 class Drupal_Sniffs_Commenting_FileCommentSniff implements PHP_CodeSniffer_Sniff
 {
-
     /**
      * The header comment parser for the current file.
      *
@@ -65,64 +66,63 @@ class Drupal_Sniffs_Commenting_FileCommentSniff implements PHP_CodeSniffer_Sniff
      *
      * @var array
      */
-    protected $tags = array(
-                       'category'   => array(
+    protected $tags = [
+                       'category'   => [
                                         'required'       => true,
                                         'allow_multiple' => false,
                                         'order_text'     => 'precedes @package',
-                                       ),
-                       'package'    => array(
+                                       ],
+                       'package'    => [
                                         'required'       => true,
                                         'allow_multiple' => false,
                                         'order_text'     => 'follows @category',
-                                       ),
-                       'subpackage' => array(
+                                       ],
+                       'subpackage' => [
                                         'required'       => false,
                                         'allow_multiple' => false,
                                         'order_text'     => 'follows @package',
-                                       ),
-                       'author'     => array(
+                                       ],
+                       'author'     => [
                                         'required'       => true,
                                         'allow_multiple' => true,
                                         'order_text'     => 'follows @subpackage (if used) or @package',
-                                       ),
-                       'copyright'  => array(
+                                       ],
+                       'copyright'  => [
                                         'required'       => false,
                                         'allow_multiple' => true,
                                         'order_text'     => 'follows @author',
-                                       ),
-                       'license'    => array(
+                                       ],
+                       'license'    => [
                                         'required'       => true,
                                         'allow_multiple' => false,
                                         'order_text'     => 'follows @copyright (if used) or @author',
-                                       ),
-                       'version'    => array(
+                                       ],
+                       'version'    => [
                                         'required'       => false,
                                         'allow_multiple' => false,
                                         'order_text'     => 'follows @license',
-                                       ),
-                       'link'       => array(
+                                       ],
+                       'link'       => [
                                         'required'       => true,
                                         'allow_multiple' => true,
                                         'order_text'     => 'follows @version',
-                                       ),
-                       'see'        => array(
+                                       ],
+                       'see'        => [
                                         'required'       => false,
                                         'allow_multiple' => true,
                                         'order_text'     => 'follows @link',
-                                       ),
-                       'since'      => array(
+                                       ],
+                       'since'      => [
                                         'required'       => false,
                                         'allow_multiple' => false,
                                         'order_text'     => 'follows @see (if used) or @link',
-                                       ),
-                       'deprecated' => array(
+                                       ],
+                       'deprecated' => [
                                         'required'       => false,
                                         'allow_multiple' => false,
                                         'order_text'     => 'follows @since (if used) or @see (if used) or @link',
-                                       ),
-                );
-
+                                       ],
+                ];
 
     /**
      * Returns an array of tokens this test wants to listen for.
@@ -131,10 +131,10 @@ class Drupal_Sniffs_Commenting_FileCommentSniff implements PHP_CodeSniffer_Sniff
      */
     public function register()
     {
-        return array(T_OPEN_TAG);
+        return [T_OPEN_TAG];
+    }
 
-    }//end register()
-
+//end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -189,14 +189,16 @@ class Drupal_Sniffs_Commenting_FileCommentSniff implements PHP_CodeSniffer_Sniff
         if ($tokens[$commentStart]['code'] === T_CLOSE_TAG) {
             // We are only interested if this is the first open tag.
             return;
-        } else if ($tokens[$commentStart]['code'] === T_COMMENT) {
+        } elseif ($tokens[$commentStart]['code'] === T_COMMENT) {
             $error = 'You must use "/**" style comments for a file comment';
             $phpcsFile->addError($error, $errorToken);
+
             return;
-        } else if ($commentStart === false
+        } elseif ($commentStart === false
             || $tokens[$commentStart]['code'] !== T_DOC_COMMENT
         ) {
             $phpcsFile->addError('Missing file doc comment', $errorToken);
+
             return;
         } else {
 
@@ -212,12 +214,12 @@ class Drupal_Sniffs_Commenting_FileCommentSniff implements PHP_CodeSniffer_Sniff
 
             // Check if there is only 1 doc comment between the
             // open tag and class token.
-            $nextToken   = array(
+            $nextToken = [
                             T_ABSTRACT,
                             T_CLASS,
                             T_FUNCTION,
                             T_DOC_COMMENT,
-                           );
+                           ];
 
             $commentNext = $phpcsFile->findNext($nextToken, ($commentEnd + 1));
             if ($commentNext !== false
@@ -246,6 +248,7 @@ class Drupal_Sniffs_Commenting_FileCommentSniff implements PHP_CodeSniffer_Sniff
                         // The doc block is most likely a class comment.
                         $error = 'Missing file doc comment';
                         $phpcsFile->addError($error, $errorToken);
+
                         return;
                     }
                 }
@@ -263,6 +266,7 @@ class Drupal_Sniffs_Commenting_FileCommentSniff implements PHP_CodeSniffer_Sniff
             } catch (PHP_CodeSniffer_CommentParser_ParserException $e) {
                 $line = ($e->getLineWithinComment() + $commentStart);
                 $phpcsFile->addError($e->getMessage(), $line);
+
                 return;
             }
 
@@ -270,15 +274,16 @@ class Drupal_Sniffs_Commenting_FileCommentSniff implements PHP_CodeSniffer_Sniff
             if (is_null($comment) === true) {
                 $error = 'File doc comment is empty';
                 $phpcsFile->addError($error, $commentStart);
+
                 return;
             }
 
             // No extra newline before short description.
-            $short        = $comment->getShortComment();
+            $short = $comment->getShortComment();
             $newlineCount = 0;
-            $newlineSpan  = strspn($short, $phpcsFile->eolChar);
+            $newlineSpan = strspn($short, $phpcsFile->eolChar);
             if ($short !== '' && $newlineSpan > 0) {
-                $line  = ($newlineSpan > 1) ? 'newlines' : 'newline';
+                $line = ($newlineSpan > 1) ? 'newlines' : 'newline';
                 $error = "Extra $line found before file comment short description";
                 $phpcsFile->addError($error, ($commentStart + 1));
             }
@@ -288,7 +293,7 @@ class Drupal_Sniffs_Commenting_FileCommentSniff implements PHP_CodeSniffer_Sniff
             // Exactly one blank line between short and long description.
             $long = $comment->getLongComment();
             if (empty($long) === false) {
-                $between        = $comment->getWhiteSpaceBetween();
+                $between = $comment->getWhiteSpaceBetween();
                 $newlineBetween = substr_count($between, $phpcsFile->eolChar);
                 if ($newlineBetween !== 2) {
                     $error = 'There must be exactly one blank line between descriptions in file comment';
@@ -319,9 +324,9 @@ class Drupal_Sniffs_Commenting_FileCommentSniff implements PHP_CodeSniffer_Sniff
             // Check each tag.
             $this->processTags($commentStart, $commentEnd);
         }//end if
+    }
 
-    }//end process()
-
+//end process()
 
     /**
      * Check that the PHP version is specified.
@@ -336,11 +341,11 @@ class Drupal_Sniffs_Commenting_FileCommentSniff implements PHP_CodeSniffer_Sniff
     {
         if (strstr(strtolower($commentText), 'php version') === false) {
             $error = 'PHP version not specified';
-             $this->currentFile->addWarning($error, $commentEnd);
+            $this->currentFile->addWarning($error, $commentEnd);
         }
+    }
 
-    }//end processPHPVersion()
-
+//end processPHPVersion()
 
     /**
      * Processes each required or optional tag.
@@ -352,12 +357,12 @@ class Drupal_Sniffs_Commenting_FileCommentSniff implements PHP_CodeSniffer_Sniff
      */
     protected function processTags($commentStart, $commentEnd)
     {
-        $docBlock    = (get_class($this) === 'PEAR_Sniffs_Commenting_FileCommentSniff') ? 'file' : 'class';
-        $foundTags   = $this->commentParser->getTagOrders();
-        $orderIndex  = 0;
-        $indentation = array();
-        $longestTag  = 0;
-        $errorPos    = 0;
+        $docBlock = (get_class($this) === 'PEAR_Sniffs_Commenting_FileCommentSniff') ? 'file' : 'class';
+        $foundTags = $this->commentParser->getTagOrders();
+        $orderIndex = 0;
+        $indentation = [];
+        $longestTag = 0;
+        $errorPos = 0;
 
         foreach ($this->tags as $tag => $info) {
 
@@ -374,7 +379,7 @@ class Drupal_Sniffs_Commenting_FileCommentSniff implements PHP_CodeSniffer_Sniff
                 $tagName .= 's';
             }
 
-            $getMethod  = 'get'.$tagName;
+            $getMethod = 'get'.$tagName;
             $tagElement = $this->commentParser->$getMethod();
             if (is_null($tagElement) === true || empty($tagElement) === true) {
                 continue;
@@ -395,7 +400,7 @@ class Drupal_Sniffs_Commenting_FileCommentSniff implements PHP_CodeSniffer_Sniff
                     $this->currentFile->addError($error, $errorPos);
                 } else {
                     // Make sure same tags are grouped together.
-                    $i     = 0;
+                    $i = 0;
                     $count = $foundIndexes[0];
                     foreach ($foundIndexes as $index) {
                         if ($index !== $count) {
@@ -432,23 +437,23 @@ class Drupal_Sniffs_Commenting_FileCommentSniff implements PHP_CodeSniffer_Sniff
 
             if (is_array($tagElement) === true) {
                 foreach ($tagElement as $key => $element) {
-                    $indentation[] = array(
+                    $indentation[] = [
                                       'tag'   => $tag,
                                       'space' => $this->getIndentation($tag, $element),
                                       'line'  => $element->getLine(),
-                                     );
+                                     ];
                 }
             } else {
-                $indentation[] = array(
+                $indentation[] = [
                                   'tag'   => $tag,
                                   'space' => $this->getIndentation($tag, $tagElement),
-                                 );
+                                 ];
             }
 
             $method = 'process'.$tagName;
             if (method_exists($this, $method) === true) {
                 // Process each tag if a method is defined.
-                call_user_func(array($this, $method), $errorPos);
+                call_user_func([$this, $method], $errorPos);
             } else {
                 if (is_array($tagElement) === true) {
                     foreach ($tagElement as $key => $element) {
@@ -459,7 +464,7 @@ class Drupal_Sniffs_Commenting_FileCommentSniff implements PHP_CodeSniffer_Sniff
                         );
                     }
                 } else {
-                     $tagElement->process(
+                    $tagElement->process(
                          $this->currentFile,
                          $commentStart,
                          $docBlock
@@ -473,9 +478,9 @@ class Drupal_Sniffs_Commenting_FileCommentSniff implements PHP_CodeSniffer_Sniff
                 && $indentInfo['space'] !== ($longestTag + 1)
             ) {
                 $expected = (($longestTag - strlen($indentInfo['tag'])) + 1);
-                $space    = ($indentInfo['space'] - strlen($indentInfo['tag']));
-                $error    = "@$indentInfo[tag] tag comment indented incorrectly. ";
-                $error   .= "Expected $expected spaces but found $space.";
+                $space = ($indentInfo['space'] - strlen($indentInfo['tag']));
+                $error = "@$indentInfo[tag] tag comment indented incorrectly. ";
+                $error .= "Expected $expected spaces but found $space.";
 
                 $getTagMethod = 'get'.ucfirst($indentInfo['tag']);
 
@@ -483,15 +488,15 @@ class Drupal_Sniffs_Commenting_FileCommentSniff implements PHP_CodeSniffer_Sniff
                     $line = $indentInfo['line'];
                 } else {
                     $tagElem = $this->commentParser->$getTagMethod();
-                    $line    = $tagElem->getLine();
+                    $line = $tagElem->getLine();
                 }
 
                 $this->currentFile->addError($error, ($commentStart + $line));
             }
         }
+    }
 
-    }//end processTags()
-
+//end processTags()
 
     /**
      * Get the indentation information of each tag.
@@ -508,18 +513,18 @@ class Drupal_Sniffs_Commenting_FileCommentSniff implements PHP_CodeSniffer_Sniff
     {
         if ($tagElement instanceof PHP_CodeSniffer_CommentParser_SingleElement) {
             if ($tagElement->getContent() !== '') {
-                return (strlen($tagName) + substr_count($tagElement->getWhitespaceBeforeContent(), ' '));
+                return strlen($tagName) + substr_count($tagElement->getWhitespaceBeforeContent(), ' ');
             }
-        } else if ($tagElement instanceof PHP_CodeSniffer_CommentParser_PairElement) {
+        } elseif ($tagElement instanceof PHP_CodeSniffer_CommentParser_PairElement) {
             if ($tagElement->getValue() !== '') {
-                return (strlen($tagName) + substr_count($tagElement->getWhitespaceBeforeValue(), ' '));
+                return strlen($tagName) + substr_count($tagElement->getWhitespaceBeforeValue(), ' ');
             }
         }
 
         return 0;
+    }
 
-    }//end getIndentation()
-
+//end getIndentation()
 
     /**
      * Process the category tag.
@@ -536,15 +541,15 @@ class Drupal_Sniffs_Commenting_FileCommentSniff implements PHP_CodeSniffer_Sniff
             if ($content !== '') {
                 if (PHP_CodeSniffer::isUnderscoreName($content) !== true) {
                     $newContent = str_replace(' ', '_', $content);
-                    $nameBits   = explode('_', $newContent);
-                    $firstBit   = array_shift($nameBits);
-                    $newName    = ucfirst($firstBit).'_';
+                    $nameBits = explode('_', $newContent);
+                    $firstBit = array_shift($nameBits);
+                    $newName = ucfirst($firstBit).'_';
                     foreach ($nameBits as $bit) {
                         $newName .= ucfirst($bit).'_';
                     }
 
                     $validName = trim($newName, '_');
-                    $error     = "Category name \"$content\" is not valid; consider \"$validName\" instead";
+                    $error = "Category name \"$content\" is not valid; consider \"$validName\" instead";
                     $this->currentFile->addError($error, $errorPos);
                 }
             } else {
@@ -552,9 +557,9 @@ class Drupal_Sniffs_Commenting_FileCommentSniff implements PHP_CodeSniffer_Sniff
                 $this->currentFile->addError($error, $errorPos);
             }
         }
+    }
 
-    }//end processCategory()
-
+//end processCategory()
 
     /**
      * Process the package tag.
@@ -571,15 +576,15 @@ class Drupal_Sniffs_Commenting_FileCommentSniff implements PHP_CodeSniffer_Sniff
             if ($content !== '') {
                 if (PHP_CodeSniffer::isUnderscoreName($content) !== true) {
                     $newContent = str_replace(' ', '_', $content);
-                    $nameBits   = explode('_', $newContent);
-                    $firstBit   = array_shift($nameBits);
-                    $newName    = strtoupper($firstBit{0}).substr($firstBit, 1).'_';
+                    $nameBits = explode('_', $newContent);
+                    $firstBit = array_shift($nameBits);
+                    $newName = strtoupper($firstBit[0]).substr($firstBit, 1).'_';
                     foreach ($nameBits as $bit) {
-                        $newName .= strtoupper($bit{0}).substr($bit, 1).'_';
+                        $newName .= strtoupper($bit[0]).substr($bit, 1).'_';
                     }
 
                     $validName = trim($newName, '_');
-                    $error     = "Package name \"$content\" is not valid; consider \"$validName\" instead";
+                    $error = "Package name \"$content\" is not valid; consider \"$validName\" instead";
                     $this->currentFile->addError($error, $errorPos);
                 }
             } else {
@@ -587,9 +592,9 @@ class Drupal_Sniffs_Commenting_FileCommentSniff implements PHP_CodeSniffer_Sniff
                 $this->currentFile->addError($error, $errorPos);
             }
         }
+    }
 
-    }//end processPackage()
-
+//end processPackage()
 
     /**
      * Process the subpackage tag.
@@ -606,15 +611,15 @@ class Drupal_Sniffs_Commenting_FileCommentSniff implements PHP_CodeSniffer_Sniff
             if ($content !== '') {
                 if (PHP_CodeSniffer::isUnderscoreName($content) !== true) {
                     $newContent = str_replace(' ', '_', $content);
-                    $nameBits   = explode('_', $newContent);
-                    $firstBit   = array_shift($nameBits);
-                    $newName    = strtoupper($firstBit{0}).substr($firstBit, 1).'_';
+                    $nameBits = explode('_', $newContent);
+                    $firstBit = array_shift($nameBits);
+                    $newName = strtoupper($firstBit[0]).substr($firstBit, 1).'_';
                     foreach ($nameBits as $bit) {
-                        $newName .= strtoupper($bit{0}).substr($bit, 1).'_';
+                        $newName .= strtoupper($bit[0]).substr($bit, 1).'_';
                     }
 
                     $validName = trim($newName, '_');
-                    $error     = "Subpackage name \"$content\" is not valid; consider \"$validName\" instead";
+                    $error = "Subpackage name \"$content\" is not valid; consider \"$validName\" instead";
                     $this->currentFile->addError($error, $errorPos);
                 }
             } else {
@@ -622,9 +627,9 @@ class Drupal_Sniffs_Commenting_FileCommentSniff implements PHP_CodeSniffer_Sniff
                 $this->currentFile->addError($error, $errorPos);
             }
         }
+    }
 
-    }//end processSubpackage()
-
+//end processSubpackage()
 
     /**
      * Process the author tag(s) that this header comment has.
@@ -640,12 +645,12 @@ class Drupal_Sniffs_Commenting_FileCommentSniff implements PHP_CodeSniffer_Sniff
      */
     protected function processAuthors($commentStart)
     {
-         $authors = $this->commentParser->getAuthors();
+        $authors = $this->commentParser->getAuthors();
         // Report missing return.
         if (empty($authors) === false) {
             foreach ($authors as $author) {
                 $errorPos = ($commentStart + $author->getLine());
-                $content  = $author->getContent();
+                $content = $author->getContent();
                 if ($content !== '') {
                     $local = '\da-zA-Z-_+';
                     // Dot character cannot be the first or last character
@@ -662,9 +667,9 @@ class Drupal_Sniffs_Commenting_FileCommentSniff implements PHP_CodeSniffer_Sniff
                 }
             }
         }
+    }
 
-    }//end processAuthors()
-
+//end processAuthors()
 
     /**
      * Process the copyright tags.
@@ -679,9 +684,9 @@ class Drupal_Sniffs_Commenting_FileCommentSniff implements PHP_CodeSniffer_Sniff
         $copyrights = $this->commentParser->getCopyrights();
         foreach ($copyrights as $copyright) {
             $errorPos = ($commentStart + $copyright->getLine());
-            $content  = $copyright->getContent();
+            $content = $copyright->getContent();
             if ($content !== '') {
-                $matches = array();
+                $matches = [];
                 if (preg_match('/^([0-9]{4})((.{1})([0-9]{4}))? (.+)$/', $content, $matches) !== 0) {
                     // Check earliest-latest year order.
                     if ($matches[3] !== '') {
@@ -704,9 +709,9 @@ class Drupal_Sniffs_Commenting_FileCommentSniff implements PHP_CodeSniffer_Sniff
                 $this->currentFile->addError($error, $errorPos);
             }//end if
         }//end if
+    }
 
-    }//end processCopyrights()
-
+//end processCopyrights()
 
     /**
      * Process the license tag.
@@ -719,16 +724,16 @@ class Drupal_Sniffs_Commenting_FileCommentSniff implements PHP_CodeSniffer_Sniff
     {
         $license = $this->commentParser->getLicense();
         if ($license !== null) {
-            $value   = $license->getValue();
+            $value = $license->getValue();
             $comment = $license->getComment();
             if ($value === '' || $comment === '') {
                 $error = '@license tag must contain a URL and a license name';
                 $this->currentFile->addError($error, $errorPos);
             }
         }
+    }
 
-    }//end processLicense()
-
+//end processLicense()
 
     /**
      * Process the version tag.
@@ -742,21 +747,18 @@ class Drupal_Sniffs_Commenting_FileCommentSniff implements PHP_CodeSniffer_Sniff
         $version = $this->commentParser->getVersion();
         if ($version !== null) {
             $content = $version->getContent();
-            $matches = array();
+            $matches = [];
             if (empty($content) === true) {
                 $error = 'Content missing for @version tag in file comment';
                 $this->currentFile->addError($error, $errorPos);
-            } else if (strstr($content, 'CVS:') === false
+            } elseif (strstr($content, 'CVS:') === false
                 && strstr($content, 'SVN:') === false
             ) {
                 $error = "Invalid version \"$content\" in file comment; consider \"CVS: <cvs_id>\" or \"SVN: <svn_id>\" instead";
                 $this->currentFile->addWarning($error, $errorPos);
             }
         }
+    }
 
-    }//end processVersion()
-
-
+//end processVersion()
 }//end class
-
-?>

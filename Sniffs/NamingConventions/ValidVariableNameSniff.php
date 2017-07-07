@@ -5,15 +5,16 @@
  * PHP version 5
  *
  * @category  PHP
- * @package   PHP_CodeSniffer
+ *
  * @author    Serge Shirokov <bolter.fire@gmail.com>
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
+ *
  * @version   CVS: $Id: ValidVariableNameSniff.php,v 1.2 2008/06/13 04:10:43 squiz Exp $
+ *
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
-
 if (class_exists('PHP_CodeSniffer_Standards_AbstractVariableSniff', true) === false) {
     $error = 'Class PHP_CodeSniffer_Standards_AbstractVariableSniff not found';
     throw new PHP_CodeSniffer_Exception($error);
@@ -25,20 +26,18 @@ if (class_exists('PHP_CodeSniffer_Standards_AbstractVariableSniff', true) === fa
  * Checks the naming of member variables.
  *
  * @category  PHP
- * @package   PHP_CodeSniffer
+ *
  * @author    Serge Shirokov <bolter.fire@gmail.com>
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
+ *
  * @version   Release: 1.2.0RC3
+ *
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
-class Drupal_Sniffs_NamingConventions_ValidVariableNameSniff
-
-    extends PHP_CodeSniffer_Standards_AbstractVariableSniff
+class Drupal_Sniffs_NamingConventions_ValidVariableNameSniff extends PHP_CodeSniffer_Standards_AbstractVariableSniff
 {
-
-
     /**
      * Processes class member variables.
      *
@@ -57,29 +56,31 @@ class Drupal_Sniffs_NamingConventions_ValidVariableNameSniff
             return;
         }
 
-        $memberName     = ltrim($tokens[$stackPtr]['content'], '$');
-        $isPublic       = ($memberProps['scope'] === 'private') ? false : true;
-        $scope          = $memberProps['scope'];
+        $memberName = ltrim($tokens[$stackPtr]['content'], '$');
+        $isPublic = ($memberProps['scope'] === 'private') ? false : true;
+        $scope = $memberProps['scope'];
         $scopeSpecified = $memberProps['scope_specified'];
 
         // If it's a private member, it must have an underscore on the front.
-        if ($isPublic === false && $memberName{0} !== '_') {
+        if ($isPublic === false && $memberName[0] !== '_') {
             $error = "Private member variable \"$memberName\" must be
                 prefixed with an underscore";
             $phpcsFile->addError($error, $stackPtr);
+
             return;
         }
 
         // If it's not a private member, it must not have an underscore on the front.
-        if ($isPublic === true && $scopeSpecified === true && $memberName{0} === '_') {
+        if ($isPublic === true && $scopeSpecified === true && $memberName[0] === '_') {
             $error = ucfirst($scope)." member variable \"$memberName\" must not be
                 prefixed with an underscore";
             $phpcsFile->addError($error, $stackPtr);
+
             return;
         }
+    }
 
-    }//end processMemberVar()
-
+//end processMemberVar()
 
     /**
      * Processes normal variables.
@@ -112,10 +113,9 @@ class Drupal_Sniffs_NamingConventions_ValidVariableNameSniff
             return;
         }  */
         // We don't care about normal variables.
-        return;
+    }
 
-    }//end processVariable()
-
+//end processVariable()
 
     /**
      * Processes variables in double quoted strings.
@@ -128,11 +128,7 @@ class Drupal_Sniffs_NamingConventions_ValidVariableNameSniff
     protected function processVariableInString(PHP_CodeSniffer_File $phpcsFile, $stackPtr)
     {
         // We don't care about normal variables.
-        return;
+    }
 
-    }//end processVariableInString()
-
-
+//end processVariableInString()
 }//end class
-
-?>

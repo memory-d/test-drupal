@@ -5,12 +5,14 @@
  * PHP version 5
  *
  * @category  PHP
- * @package   PHP_CodeSniffer
+ *
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
+ *
  * @version   CVS: $Id: InlineCommentSniff.php,v 1.5 2008/12/02 02:38:34 squiz Exp $
+ *
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -20,18 +22,18 @@
  * Checks that no perl-style comments are used.
  *
  * @category  PHP
- * @package   PHP_CodeSniffer
+ *
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
+ *
  * @version   Release: 1.2.0RC3
+ *
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class Drupal_Sniffs_Commenting_InlineCommentSniff implements PHP_CodeSniffer_Sniff
 {
-
-
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -39,10 +41,10 @@ class Drupal_Sniffs_Commenting_InlineCommentSniff implements PHP_CodeSniffer_Sni
      */
     public function register()
     {
-        return array(T_COMMENT);
+        return [T_COMMENT];
+    }
 
-    }//end register()
-
+//end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -57,15 +59,12 @@ class Drupal_Sniffs_Commenting_InlineCommentSniff implements PHP_CodeSniffer_Sni
     {
         $tokens = $phpcsFile->getTokens();
 
-        if ($tokens[$stackPtr]['content']{0} === '#') {
-            $error  = 'Perl-style comments are not allowed. Use "// Comment."';
+        if ($tokens[$stackPtr]['content'][0] === '#') {
+            $error = 'Perl-style comments are not allowed. Use "// Comment."';
             $error .= ' or "/* comment */" instead.';
             $phpcsFile->addError($error, $stackPtr);
         }
+    }
 
-    }//end process()
-
-
+//end process()
 }//end class
-
-?>

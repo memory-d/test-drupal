@@ -5,16 +5,17 @@
  * PHP version 5
  *
  * @category  PHP
- * @package   PHP_CodeSniffer
+ *
  * @author    Serge Shirokov <bolter.fire@gmail.com>
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
+ *
  * @version   CVS: $Id: ValidFunctionNameSniff.php,v 1.19 2009/07/06 03:16:27 squiz Exp $
+ *
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
-
 if (class_exists('PHP_CodeSniffer_Standards_AbstractScopeSniff', true) === false) {
     throw new PHP_CodeSniffer_Exception('Class PHP_CodeSniffer_Standards_AbstractScopeSniff not found');
 }
@@ -26,24 +27,25 @@ if (class_exists('PHP_CodeSniffer_Standards_AbstractScopeSniff', true) === false
  * or private, and that functions are named correctly.
  *
  * @category  PHP
- * @package   PHP_CodeSniffer
+ *
  * @author    Serge Shirokov <bolter.fire@gmail.com>
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
+ *
  * @version   Release: 1.2.0RC3
+ *
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class Drupal_Sniffs_NamingConventions_ValidFunctionNameSniff extends PHP_CodeSniffer_Standards_AbstractScopeSniff
 {
-
     /**
      * A list of all PHP magic methods.
      *
      * @var array
      */
-    protected $magicMethods = array(
+    protected $magicMethods = [
                                'construct',
                                'destruct',
                                'call',
@@ -57,25 +59,24 @@ class Drupal_Sniffs_NamingConventions_ValidFunctionNameSniff extends PHP_CodeSni
                                'toString',
                                'set_state',
                                'clone',
-                              );
+                              ];
 
     /**
      * A list of all PHP magic functions.
      *
      * @var array
      */
-    protected $magicFunctions = array('autoload');
-
+    protected $magicFunctions = ['autoload'];
 
     /**
      * Constructs a PEAR_Sniffs_NamingConventions_ValidFunctionNameSniff.
      */
     public function __construct()
     {
-        parent::__construct(array(T_CLASS, T_INTERFACE), array(T_FUNCTION), true);
+        parent::__construct([T_CLASS, T_INTERFACE], [T_FUNCTION], true);
+    }
 
-    }//end __construct()
-
+//end __construct()
 
     /**
      * Processes the tokens within the scope.
@@ -89,15 +90,15 @@ class Drupal_Sniffs_NamingConventions_ValidFunctionNameSniff extends PHP_CodeSni
      */
     protected function processTokenWithinScope(PHP_CodeSniffer_File $phpcsFile, $stackPtr, $currScope)
     {
-        $className  = $phpcsFile->getDeclarationName($currScope);
+        $className = $phpcsFile->getDeclarationName($currScope);
         $methodName = $phpcsFile->getDeclarationName($stackPtr);
 
         // Is this a magic method. IE. is prefixed with "__".
         if (preg_match('|^__|', $methodName) !== 0) {
             $magicPart = substr($methodName, 2);
             if (in_array($magicPart, $this->magicMethods) === false) {
-                 $error = "Method name \"$className::$methodName\" is invalid; only PHP magic methods should be prefixed with a double underscore";
-                 $phpcsFile->addError($error, $stackPtr);
+                $error = "Method name \"$className::$methodName\" is invalid; only PHP magic methods should be prefixed with a double underscore";
+                $phpcsFile->addError($error, $stackPtr);
             }
 
             return;
@@ -113,22 +114,24 @@ class Drupal_Sniffs_NamingConventions_ValidFunctionNameSniff extends PHP_CodeSni
             return;
         }
 
-        $methodProps    = $phpcsFile->getMethodProperties($stackPtr);
-        $isPublic       = ($methodProps['scope'] === 'private') ? false : true;
-        $scope          = $methodProps['scope'];
+        $methodProps = $phpcsFile->getMethodProperties($stackPtr);
+        $isPublic = ($methodProps['scope'] === 'private') ? false : true;
+        $scope = $methodProps['scope'];
         $scopeSpecified = $methodProps['scope_specified'];
 
         // If it's a private method, it must have an underscore on the front.
-        if ($isPublic === false && $methodName{0} !== '_') {
+        if ($isPublic === false && $methodName[0] !== '_') {
             $error = "Private method name \"$className::$methodName\" must be prefixed with an underscore";
             $phpcsFile->addError($error, $stackPtr);
+
             return;
         }
 
         // If it's not a private method, it must not have an underscore on the front.
-        if ($isPublic === true && $scopeSpecified === true && $methodName{0} === '_') {
+        if ($isPublic === true && $scopeSpecified === true && $methodName[0] === '_') {
             $error = ucfirst($scope)." method name \"$className::$methodName\" must not be prefixed with an underscore";
             $phpcsFile->addError($error, $stackPtr);
+
             return;
         }
 
@@ -138,7 +141,7 @@ class Drupal_Sniffs_NamingConventions_ValidFunctionNameSniff extends PHP_CodeSni
         // prefix if there is one because we cant determine if it is private or
         // public.
         $testMethodName = $methodName;
-        if ($scopeSpecified === false && $methodName{0} === '_') {
+        if ($scopeSpecified === false && $methodName[0] === '_') {
             $testMethodName = substr($methodName, 1);
         }
 
@@ -150,11 +153,12 @@ class Drupal_Sniffs_NamingConventions_ValidFunctionNameSniff extends PHP_CodeSni
             }
 
             $phpcsFile->addError($error, $stackPtr);
+
             return;
         }
+    }
 
-    }//end processTokenWithinScope()
-
+//end processTokenWithinScope()
 
     /**
      * Processes the tokens outside the scope.
@@ -173,8 +177,8 @@ class Drupal_Sniffs_NamingConventions_ValidFunctionNameSniff extends PHP_CodeSni
         if (preg_match('|^__|', $functionName) !== 0) {
             $magicPart = substr($functionName, 2);
             if (in_array($magicPart, $this->magicFunctions) === false) {
-                 $error = "Function name \"$functionName\" is invalid; only PHP magic methods should be prefixed with a double underscore";
-                 $phpcsFile->addError($error, $stackPtr);
+                $error = "Function name \"$functionName\" is invalid; only PHP magic methods should be prefixed with a double underscore";
+                $phpcsFile->addError($error, $stackPtr);
             }
 
             return;
@@ -182,13 +186,13 @@ class Drupal_Sniffs_NamingConventions_ValidFunctionNameSniff extends PHP_CodeSni
 
         // Function names can be in two parts; the package name and
         // the function name.
-        $packagePart   = '';
+        $packagePart = '';
         $camelCapsPart = '';
         $underscorePos = strrpos($functionName, '_');
         if ($underscorePos === false) {
             $camelCapsPart = $functionName;
         } else {
-            $packagePart   = substr($functionName, 0, $underscorePos);
+            $packagePart = substr($functionName, 0, $underscorePos);
             $camelCapsPart = substr($functionName, ($underscorePos + 1));
 
             // We don't care about _'s on the front.
@@ -197,22 +201,24 @@ class Drupal_Sniffs_NamingConventions_ValidFunctionNameSniff extends PHP_CodeSni
 
         // If it has a package part, make sure the first letter is a capital.
         if ($packagePart !== '') {
-            if ($functionName{0} === '_') {
+            if ($functionName[0] === '_') {
                 $error = "Function name \"$functionName\" is invalid; only private methods should be prefixed with an underscore";
                 $phpcsFile->addError($error, $stackPtr);
+
                 return;
             }
 
-            if ($functionName{0} == strtoupper($functionName{0})) {
+            if ($functionName[0] == strtoupper($functionName[0])) {
                 $error = "Function name \"$functionName\" is prefixed with a package name but should not begin with capital letter";
                 $phpcsFile->addError($error, $stackPtr);
+
                 return;
             }
-            
         } else {
-                $error = "Function name \"$functionName\" doesn't include package part. Functions should in addition have the grouping/module name as a prefix, to avoid name collisions between modules.";
-                $phpcsFile->addError($error, $stackPtr);
-                return;
+            $error = "Function name \"$functionName\" doesn't include package part. Functions should in addition have the grouping/module name as a prefix, to avoid name collisions between modules.";
+            $phpcsFile->addError($error, $stackPtr);
+
+            return;
         }
 
         // If it doesn't have a camel caps part, it's not valid.
@@ -223,8 +229,8 @@ class Drupal_Sniffs_NamingConventions_ValidFunctionNameSniff extends PHP_CodeSni
             return;
         } */
 
-        $validName        = true;
-        $newPackagePart   = $packagePart;
+        $validName = true;
+        $newPackagePart = $packagePart;
         $newCamelCapsPart = $camelCapsPart;
 
         // Every function must have a camel caps part, so check that first.
@@ -263,10 +269,7 @@ class Drupal_Sniffs_NamingConventions_ValidFunctionNameSniff extends PHP_CodeSni
             $phpcsFile->addError($error, $stackPtr);
         }
         */
+    }
 
-    }//end processTokenOutsideScope()
-
-
+//end processTokenOutsideScope()
 }//end class
-
-?>

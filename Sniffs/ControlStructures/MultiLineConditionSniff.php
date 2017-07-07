@@ -5,11 +5,13 @@
  * PHP version 5
  *
  * @category  PHP
- * @package   PHP_CodeSniffer
+ *
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
+ *
  * @version   CVS: $Id: MultiLineConditionSniff.php,v 1.3 2009/05/05 06:08:54 squiz Exp $
+ *
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -19,17 +21,17 @@
  * Ensure multi-line IF conditions are defined correctly.
  *
  * @category  PHP
- * @package   PHP_CodeSniffer
+ *
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
+ *
  * @version   Release: 1.2.0RC3
+ *
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class Drupal_Sniffs_ControlStructures_MultiLineConditionSniff implements PHP_CodeSniffer_Sniff
 {
-
-
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -37,10 +39,10 @@ class Drupal_Sniffs_ControlStructures_MultiLineConditionSniff implements PHP_Cod
      */
     public function register()
     {
-        return array(T_IF);
+        return [T_IF];
+    }
 
-    }//end register()
-
+//end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -71,9 +73,9 @@ class Drupal_Sniffs_ControlStructures_MultiLineConditionSniff implements PHP_Cod
 
         // Each line between the parenthesis should be indented 4 spaces
         // and start with an operator.
-        $openBracket  = $tokens[$stackPtr]['parenthesis_opener'];
+        $openBracket = $tokens[$stackPtr]['parenthesis_opener'];
         $closeBracket = $tokens[$stackPtr]['parenthesis_closer'];
-        $lastLine     = $tokens[$openBracket]['line'];
+        $lastLine = $tokens[$openBracket]['line'];
         for ($i = ($openBracket + 1); $i < $closeBracket; $i++) {
             if ($tokens[$i]['line'] !== $lastLine) {
                 if ($tokens[$i]['line'] === $tokens[$closeBracket]['line']) {
@@ -135,10 +137,7 @@ class Drupal_Sniffs_ControlStructures_MultiLineConditionSniff implements PHP_Cod
             $error = 'There must be a single space between the closing parenthesis and the openning brace of a multi-line IF statement';
             $phpcsFile->addError($error, $next);
         }
+    }
 
-    }//end process()
-
-
+//end process()
 }//end class
-
-?>
