@@ -15,7 +15,7 @@ engines:
   phpcodesniffer:
     enabled: true
     config:
-    standard: "PSR1,PSR2,Drupal,DrupalPractice"
+    standard: "Drupal,DrupalPractice"
 ratings:
   paths:
   - "**.inc"
