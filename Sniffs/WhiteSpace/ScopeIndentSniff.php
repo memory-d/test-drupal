@@ -5,15 +5,16 @@
  * PHP version 5
  *
  * @category  PHP
- * @package   PHP_CodeSniffer
+ *
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
+ *
  * @version   CVS: $Id: ScopeIndentSniff.php,v 1.12 2008/03/03 02:51:39 squiz Exp $
+ *
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
-
 if (class_exists('Generic_Sniffs_WhiteSpace_ScopeIndentSniff', true) === false) {
     $error = 'Class Generic_Sniffs_WhiteSpace_ScopeIndentSniff not found';
     throw new PHP_CodeSniffer_Exception($error);
@@ -26,12 +27,14 @@ if (class_exists('Generic_Sniffs_WhiteSpace_ScopeIndentSniff', true) === false) 
  * is indented correctly.
  *
  * @category  PHP
- * @package   PHP_CodeSniffer
+ *
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
+ *
  * @version   Release: 1.2.0RC3
+ *
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class Drupal_Sniffs_WhiteSpace_ScopeIndentSniff extends Generic_Sniffs_WhiteSpace_ScopeIndentSniff
@@ -44,8 +47,5 @@ class Drupal_Sniffs_WhiteSpace_ScopeIndentSniff extends Generic_Sniffs_WhiteSpac
 //    protected $nonIndentingScopes = array(T_SWITCH);
     // Switch *should* cause indent by coding style guide.
     // see http://drupal.org/coding-standards#controlstruct
-    protected $nonIndentingScopes = array();
-
+    protected $nonIndentingScopes = [];
 }//end class
-
-?>

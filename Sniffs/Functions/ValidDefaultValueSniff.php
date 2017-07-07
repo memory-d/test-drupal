@@ -5,12 +5,14 @@
  * PHP version 5
  *
  * @category  PHP
- * @package   PHP_CodeSniffer
+ *
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
+ *
  * @version   CVS: $Id: ValidDefaultValueSniff.php,v 1.5 2007/07/23 01:47:53 squiz Exp $
+ *
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -21,18 +23,18 @@
  * value come at the end of the function signature.
  *
  * @category  PHP
- * @package   PHP_CodeSniffer
+ *
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
+ *
  * @version   Release: 1.2.0RC3
+ *
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class Drupal_Sniffs_Functions_ValidDefaultValueSniff implements PHP_CodeSniffer_Sniff
 {
-
-
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -40,10 +42,10 @@ class Drupal_Sniffs_Functions_ValidDefaultValueSniff implements PHP_CodeSniffer_
      */
     public function register()
     {
-        return array(T_FUNCTION);
+        return [T_FUNCTION];
+    }
 
-    }//end register()
-
+//end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -59,7 +61,7 @@ class Drupal_Sniffs_Functions_ValidDefaultValueSniff implements PHP_CodeSniffer_
         $tokens = $phpcsFile->getTokens();
 
         $argStart = $tokens[$stackPtr]['parenthesis_opener'];
-        $argEnd   = $tokens[$stackPtr]['parenthesis_closer'];
+        $argEnd = $tokens[$stackPtr]['parenthesis_closer'];
 
         // Flag for when we have found a default in our arg list.
         // If there is a value without a default after this, it is an error.
@@ -69,9 +71,10 @@ class Drupal_Sniffs_Functions_ValidDefaultValueSniff implements PHP_CodeSniffer_
         while (($nextArg = $phpcsFile->findNext(T_VARIABLE, ($nextArg + 1), $argEnd)) !== false) {
             $argHasDefault = self::_argHasDefault($phpcsFile, $nextArg);
             if (($argHasDefault === false) && ($defaultFound === true)) {
-                $error  = 'Arguments with default values must be at the end';
+                $error = 'Arguments with default values must be at the end';
                 $error .= ' of the argument list';
                 $phpcsFile->addError($error, $nextArg);
+
                 return;
             }
 
@@ -79,9 +82,9 @@ class Drupal_Sniffs_Functions_ValidDefaultValueSniff implements PHP_CodeSniffer_
                 $defaultFound = true;
             }
         }
+    }
 
-    }//end process()
-
+//end process()
 
     /**
      * Returns true if the passed argument has a default value.
@@ -94,17 +97,14 @@ class Drupal_Sniffs_Functions_ValidDefaultValueSniff implements PHP_CodeSniffer_
      */
     private static function _argHasDefault(PHP_CodeSniffer_File $phpcsFile, $argPtr)
     {
-        $tokens    = $phpcsFile->getTokens();
+        $tokens = $phpcsFile->getTokens();
         $nextToken = $phpcsFile->findNext(PHP_CodeSniffer_Tokens::$emptyTokens, ($argPtr + 1), null, true);
         if ($tokens[$nextToken]['code'] !== T_EQUAL) {
             return false;
         }
 
         return true;
+    }
 
-    }//end _argHasDefault()
-
-
+//end _argHasDefault()
 }//end class
-
-?>

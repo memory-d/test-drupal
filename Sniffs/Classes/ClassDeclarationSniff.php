@@ -5,12 +5,14 @@
  * PHP version 5
  *
  * @category  PHP
- * @package   PHP_CodeSniffer
+ *
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
+ *
  * @version   CVS: $Id: ClassDeclarationSniff.php,v 1.5 2008/05/19 05:59:25 squiz Exp $
+ *
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -20,18 +22,18 @@
  * Checks the declaration of the class is correct.
  *
  * @category  PHP
- * @package   PHP_CodeSniffer
+ *
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
+ *
  * @version   Release: 1.2.0RC3
+ *
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class Drupal_Sniffs_Classes_ClassDeclarationSniff implements PHP_CodeSniffer_Sniff
 {
-
-
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -39,13 +41,13 @@ class Drupal_Sniffs_Classes_ClassDeclarationSniff implements PHP_CodeSniffer_Sni
      */
     public function register()
     {
-        return array(
+        return [
                 T_CLASS,
                 T_INTERFACE,
-               );
+               ];
+    }
 
-    }//end register()
-
+//end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -61,22 +63,24 @@ class Drupal_Sniffs_Classes_ClassDeclarationSniff implements PHP_CodeSniffer_Sni
         $tokens = $phpcsFile->getTokens();
 
         if (isset($tokens[$stackPtr]['scope_opener']) === false) {
-            $error  = 'Possible parse error: ';
+            $error = 'Possible parse error: ';
             $error .= $tokens[$stackPtr]['content'];
             $error .= ' missing opening or closing brace';
             $phpcsFile->addWarning($error, $stackPtr);
+
             return;
         }
 
-        $curlyBrace  = $tokens[$stackPtr]['scope_opener'];
+        $curlyBrace = $tokens[$stackPtr]['scope_opener'];
         $lastContent = $phpcsFile->findPrevious(T_WHITESPACE, ($curlyBrace - 1), $stackPtr, true);
-        $classLine   = $tokens[$lastContent]['line'];
-        $braceLine   = $tokens[$curlyBrace]['line'];
+        $classLine = $tokens[$lastContent]['line'];
+        $braceLine = $tokens[$curlyBrace]['line'];
         if ($braceLine != $classLine) {
-            $error  = 'Opening brace of a ';
+            $error = 'Opening brace of a ';
             $error .= $tokens[$stackPtr]['content'];
             $error .= ' must be on the same line as the definition';
             $phpcsFile->addError($error, $curlyBrace);
+
             return;
         } /* else if ($braceLine > ($classLine + 1)) {
             $difference  = ($braceLine - $classLine - 1);
@@ -91,7 +95,7 @@ class Drupal_Sniffs_Classes_ClassDeclarationSniff implements PHP_CodeSniffer_Sni
         } */
 
         if ($tokens[($curlyBrace + 1)]['content'] !== $phpcsFile->eolChar) {
-            $type  = strtolower($tokens[$stackPtr]['content']);
+            $type = strtolower($tokens[$stackPtr]['content']);
             $error = "Opening $type brace must be on a line by itself";
             $phpcsFile->addError($error, $curlyBrace);
         }
@@ -100,17 +104,14 @@ class Drupal_Sniffs_Classes_ClassDeclarationSniff implements PHP_CodeSniffer_Sni
             $prevContent = $tokens[($curlyBrace - 1)]['content'];
             if ($prevContent !== $phpcsFile->eolChar) {
                 $blankSpace = substr($prevContent, strpos($prevContent, $phpcsFile->eolChar));
-                $spaces     = strlen($blankSpace);
+                $spaces = strlen($blankSpace);
                 if ($spaces !== 0) {
                     $error = "Expected 1 space before opening brace; $spaces found";
                     $phpcsFile->addError($error, $curlyBrace);
                 }
             }
         }
+    }
 
-    }//end process()
-
-
+//end process()
 }//end class
-
-?>

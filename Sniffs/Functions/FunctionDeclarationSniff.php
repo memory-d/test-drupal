@@ -5,11 +5,13 @@
  * PHP version 5
  *
  * @category  PHP
- * @package   PHP_CodeSniffer
+ *
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
+ *
  * @version   CVS: $Id: FunctionDeclarationSniff.php,v 1.4 2008/12/01 05:45:49 squiz Exp $
+ *
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -19,17 +21,17 @@
  * Ensure single and multi-line function declarations are defined correctly.
  *
  * @category  PHP
- * @package   PHP_CodeSniffer
+ *
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
+ *
  * @version   Release: 1.2.0RC3
+ *
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class Drupal_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniffer_Sniff
 {
-
-
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -37,10 +39,10 @@ class Drupal_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniffe
      */
     public function register()
     {
-        return array(T_FUNCTION);
+        return [T_FUNCTION];
+    }
 
-    }//end register()
-
+//end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -56,16 +58,16 @@ class Drupal_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniffe
         $tokens = $phpcsFile->getTokens();
 
         // Check if this is a single line or multi-line declaration.
-        $openBracket  = $tokens[$stackPtr]['parenthesis_opener'];
+        $openBracket = $tokens[$stackPtr]['parenthesis_opener'];
         $closeBracket = $tokens[$stackPtr]['parenthesis_closer'];
         if ($tokens[$openBracket]['line'] === $tokens[$closeBracket]['line']) {
             $this->processSingleLineDeclaration($phpcsFile, $stackPtr, $tokens);
         } else {
             $this->processMultiLineDeclaration($phpcsFile, $stackPtr, $tokens);
         }
+    }
 
-    }//end process()
-
+//end process()
 
     /**
      * Processes single-line declarations.
@@ -88,9 +90,9 @@ class Drupal_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniffe
 
         $sniff = new Generic_Sniffs_Functions_OpeningFunctionBraceBsdAllmanSniff();
         $sniff->process($phpcsFile, $stackPtr); */
+    }
 
-    }//end processSingleLineDeclaration()
-
+//end processSingleLineDeclaration()
 
     /**
      * Processes mutli-line declarations.
@@ -121,9 +123,9 @@ class Drupal_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniffe
         }
 
         // Each line between the parenthesis should be indented 4 spaces.
-        $openBracket  = $tokens[$stackPtr]['parenthesis_opener'];
+        $openBracket = $tokens[$stackPtr]['parenthesis_opener'];
         $closeBracket = $tokens[$stackPtr]['parenthesis_closer'];
-        $lastLine     = $tokens[$openBracket]['line'];
+        $lastLine = $tokens[$openBracket]['line'];
         for ($i = ($openBracket + 1); $i < $closeBracket; $i++) {
             if ($tokens[$i]['line'] !== $lastLine) {
                 if ($tokens[$i]['line'] === $tokens[$closeBracket]['line']) {
@@ -156,7 +158,7 @@ class Drupal_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniffe
             $next = $tokens[($closeBracket + 1)];
             if ($next['code'] !== T_WHITESPACE) {
                 $length = 0;
-            } else if ($next['content'] === $phpcsFile->eolChar) {
+            } elseif ($next['content'] === $phpcsFile->eolChar) {
                 $length = -1;
             } else {
                 $length = strlen($next['content']);
@@ -171,6 +173,7 @@ class Drupal_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniffe
                 }
 
                 $phpcsFile->addError($error, ($closeBracket + 1));
+
                 return;
             }
 
@@ -187,10 +190,7 @@ class Drupal_Sniffs_Functions_FunctionDeclarationSniff implements PHP_CodeSniffe
                 $phpcsFile->addError($error, $next);
             }
         }
+    }
 
-    }//end processMultiLineDeclaration()
-
-
+//end processMultiLineDeclaration()
 }//end class
-
-?>

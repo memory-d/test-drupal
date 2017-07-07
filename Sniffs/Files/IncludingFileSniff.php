@@ -5,12 +5,14 @@
  * PHP version 5
  *
  * @category  PHP
- * @package   PHP_CodeSniffer
+ *
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
+ *
  * @version   CVS: $Id: IncludingFileSniff.php,v 1.5 2007/10/22 23:11:56 squiz Exp $
+ *
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -22,29 +24,29 @@
  * the file being included.
  *
  * @category  PHP
- * @package   PHP_CodeSniffer
+ *
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
+ *
  * @version   Release: 1.2.0RC3
+ *
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class Drupal_Sniffs_Files_IncludingFileSniff implements PHP_CodeSniffer_Sniff
 {
-
     /**
-     * Conditions that should use include_once
+     * Conditions that should use include_once.
      *
      * @var array(int)
      */
-    private static $_conditions = array(
+    private static $_conditions = [
                                    T_IF,
                                    T_ELSE,
                                    T_ELSEIF,
                                    T_SWITCH,
-                                  );
-
+                                  ];
 
     /**
      * Returns an array of tokens this test wants to listen for.
@@ -53,15 +55,15 @@ class Drupal_Sniffs_Files_IncludingFileSniff implements PHP_CodeSniffer_Sniff
      */
     public function register()
     {
-        return array(
+        return [
                 T_INCLUDE_ONCE,
                 T_REQUIRE_ONCE,
                 T_REQUIRE,
                 T_INCLUDE,
-               );
+               ];
+    }
 
-    }//end register()
-
+//end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -78,7 +80,7 @@ class Drupal_Sniffs_Files_IncludingFileSniff implements PHP_CodeSniffer_Sniff
 
         $nextToken = $phpcsFile->findNext(PHP_CodeSniffer_Tokens::$emptyTokens, ($stackPtr + 1), null, true);
         if ($tokens[$nextToken]['code'] === T_OPEN_PARENTHESIS) {
-            $error  = '"'.$tokens[$stackPtr]['content'].'"';
+            $error = '"'.$tokens[$stackPtr]['content'].'"';
             $error .= ' is a statement, not a function; ';
             $error .= 'no parentheses are required';
             $phpcsFile->addError($error, $stackPtr);
@@ -109,30 +111,27 @@ class Drupal_Sniffs_Files_IncludingFileSniff implements PHP_CodeSniffer_Sniff
         if ($inCondition === true) {
             // We are inside a conditional statement. We need an include_once.
             if ($tokenCode === T_REQUIRE_ONCE) {
-                $error  = 'File is being conditionally included; ';
+                $error = 'File is being conditionally included; ';
                 $error .= 'use "include_once" instead';
                 $phpcsFile->addError($error, $stackPtr);
-            } else if ($tokenCode === T_REQUIRE) {
-                $error  = 'File is being conditionally included; ';
+            } elseif ($tokenCode === T_REQUIRE) {
+                $error = 'File is being conditionally included; ';
                 $error .= 'use "include" instead';
                 $phpcsFile->addError($error, $stackPtr);
             }
         } else {
             // We are unconditionally including, we need a require_once.
             if ($tokenCode === T_INCLUDE_ONCE) {
-                $error  = 'File is being unconditionally included; ';
+                $error = 'File is being unconditionally included; ';
                 $error .= 'use "require_once" instead';
                 $phpcsFile->addError($error, $stackPtr);
-            } else if ($tokenCode === T_INCLUDE) {
-                $error  = 'File is being unconditionally included; ';
+            } elseif ($tokenCode === T_INCLUDE) {
+                $error = 'File is being unconditionally included; ';
                 $error .= 'use "require" instead';
                 $phpcsFile->addError($error, $stackPtr);
             }
         }//end if
+    }
 
-    }//end process()
-
-
+//end process()
 }//end class
-
-?>

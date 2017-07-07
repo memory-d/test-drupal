@@ -5,12 +5,14 @@
  * PHP version 5
  *
  * @category  PHP
- * @package   PHP_CodeSniffer
+ *
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
+ *
  * @version   CVS: $Id: FunctionCallSignatureSniff.php,v 1.7 2008/12/05 02:45:08 squiz Exp $
+ *
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -18,18 +20,18 @@
  * PEAR_Sniffs_Functions_FunctionCallSignatureSniff.
  *
  * @category  PHP
- * @package   PHP_CodeSniffer
+ *
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
+ *
  * @version   Release: 1.2.0RC3
+ *
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class Drupal_Sniffs_Functions_FunctionCallSignatureSniff implements PHP_CodeSniffer_Sniff
 {
-
-
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -37,10 +39,10 @@ class Drupal_Sniffs_Functions_FunctionCallSignatureSniff implements PHP_CodeSnif
      */
     public function register()
     {
-        return array(T_STRING);
+        return [T_STRING];
+    }
 
-    }//end register()
-
+//end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -102,9 +104,9 @@ class Drupal_Sniffs_Functions_FunctionCallSignatureSniff implements PHP_CodeSnif
         } else {
             $this->processMultiLineCall($phpcsFile, $stackPtr, $openBracket, $tokens);
         }
+    }
 
-    }//end process()
-
+//end process()
 
     /**
      * Processes single-line calls.
@@ -143,9 +145,9 @@ class Drupal_Sniffs_Functions_FunctionCallSignatureSniff implements PHP_CodeSnif
                 $phpcsFile->addError($error, $closer);
             }
         }
+    }
 
-    }//end processSingleLineCall()
-
+//end processSingleLineCall()
 
     /**
      * Processes multi-line calls.
@@ -179,11 +181,11 @@ class Drupal_Sniffs_Functions_FunctionCallSignatureSniff implements PHP_CodeSnif
 
         // Each line between the parenthesis should be indented 4 spaces.
         $closeBracket = $tokens[$openBracket]['parenthesis_closer'];
-        $lastLine     = $tokens[$openBracket]['line'];
+        $lastLine = $tokens[$openBracket]['line'];
         for ($i = ($openBracket + 1); $i < $closeBracket; $i++) {
             // Skip nested function calls.
             if ($tokens[$i]['code'] === T_OPEN_PARENTHESIS) {
-                $i        = $tokens[$i]['parenthesis_closer'];
+                $i = $tokens[$i]['parenthesis_closer'];
                 $lastLine = $tokens[$i]['line'];
                 continue;
             }
@@ -235,9 +237,7 @@ class Drupal_Sniffs_Functions_FunctionCallSignatureSniff implements PHP_CodeSnif
             $error = 'Closing parenthesis of a multi-line function call must be on a line by itself';
             $phpcsFile->addError($error, $closeBracket);
         }
+    }
 
-    }//end processMultiLineCall()
-
-
+//end processMultiLineCall()
 }//end class
-?>
