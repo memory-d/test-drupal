@@ -5,11 +5,13 @@
  * PHP version 5
  *
  * @category  PHP
- * @package   PHP_CodeSniffer
+ *
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
+ *
  * @version   CVS: $Id: MultiLineAssignmentSniff.php,v 1.2 2008/12/01 05:02:12 squiz Exp $
+ *
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -19,17 +21,17 @@
  * If an assignment goes over two lines, ensure the equal sign is indented.
  *
  * @category  PHP
- * @package   PHP_CodeSniffer
+ *
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
+ *
  * @version   Release: 1.2.0RC3
+ *
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class Drupal_Sniffs_Formatting_MultiLineAssignmentSniff implements PHP_CodeSniffer_Sniff
 {
-
-
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -37,10 +39,10 @@ class Drupal_Sniffs_Formatting_MultiLineAssignmentSniff implements PHP_CodeSniff
      */
     public function register()
     {
-        return array(T_EQUAL);
+        return [T_EQUAL];
+    }
 
-    }//end register()
-
+//end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -65,6 +67,7 @@ class Drupal_Sniffs_Formatting_MultiLineAssignmentSniff implements PHP_CodeSniff
         if ($tokens[$next]['line'] !== $tokens[$stackPtr]['line']) {
             $error = 'Multi-line assignments must have the equal sign on the second line';
             $phpcsFile->addError($error, $stackPtr);
+
             return;
         }
 
@@ -81,7 +84,7 @@ class Drupal_Sniffs_Formatting_MultiLineAssignmentSniff implements PHP_CodeSniff
 
         // Find the required indent based on the ident of the previous line.
         $assignmentIndent = 0;
-        $prevLine         = $tokens[$prev]['line'];
+        $prevLine = $tokens[$prev]['line'];
         for ($i = ($prev - 1); $i >= 0; $i--) {
             if ($tokens[$i]['line'] !== $prevLine) {
                 $i++;
@@ -97,14 +100,12 @@ class Drupal_Sniffs_Formatting_MultiLineAssignmentSniff implements PHP_CodeSniff
         $prev = $phpcsFile->findPrevious(T_WHITESPACE, ($stackPtr - 1));
 
         $expectedIndent = ($assignmentIndent + 4);
-        $foundIndent    = strlen($tokens[$prev]['content']);
+        $foundIndent = strlen($tokens[$prev]['content']);
         if ($foundIndent !== $expectedIndent) {
             $error = "Multi-line assignment not indented correctly; expected $expectedIndent spaces but found $foundIndent";
             $phpcsFile->addError($error, $stackPtr);
         }
+    }
 
-    }//end process()
-
+//end process()
 }//end class
-
-?>

@@ -5,15 +5,16 @@
  * PHP version 5
  *
  * @category  PHP
- * @package   PHP_CodeSniffer
+ *
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
+ *
  * @version   CVS: $Id: ClassCommentSniff.php,v 1.19 2008/12/02 02:38:34 squiz Exp $
+ *
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
-
 if (class_exists('PHP_CodeSniffer_CommentParser_ClassCommentParser', true) === false) {
     $error = 'Class PHP_CodeSniffer_CommentParser_ClassCommentParser not found';
     throw new PHP_CodeSniffer_Exception($error);
@@ -39,18 +40,18 @@ if (class_exists('PEAR_Sniffs_Commenting_FileCommentSniff', true) === false) {
  * </ul>
  *
  * @category  PHP
- * @package   PHP_CodeSniffer
+ *
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
+ *
  * @version   Release: 1.2.0RC3
+ *
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class Drupal_Sniffs_Commenting_ClassCommentSniff extends PEAR_Sniffs_Commenting_FileCommentSniff
 {
-
-
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -58,13 +59,13 @@ class Drupal_Sniffs_Commenting_ClassCommentSniff extends PEAR_Sniffs_Commenting_
      */
     public function register()
     {
-        return array(
+        return [
                 T_CLASS,
                 T_INTERFACE,
-               );
+               ];
+    }
 
-    }//end register()
-
+//end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -80,12 +81,12 @@ class Drupal_Sniffs_Commenting_ClassCommentSniff extends PEAR_Sniffs_Commenting_
         $this->currentFile = $phpcsFile;
 
         $tokens = $phpcsFile->getTokens();
-        $type   = strtolower($tokens[$stackPtr]['content']);
-        $find   = array(
+        $type = strtolower($tokens[$stackPtr]['content']);
+        $find = [
                    T_ABSTRACT,
                    T_WHITESPACE,
                    T_FINAL,
-                  );
+                  ];
 
         // Extract the class comment docblock.
         $commentEnd = $phpcsFile->findPrevious($find, ($stackPtr - 1), null, true);
@@ -93,16 +94,18 @@ class Drupal_Sniffs_Commenting_ClassCommentSniff extends PEAR_Sniffs_Commenting_
         if ($commentEnd !== false && $tokens[$commentEnd]['code'] === T_COMMENT) {
             $error = "You must use \"/**\" style comments for a $type comment";
             $phpcsFile->addError($error, $stackPtr);
+
             return;
-        } else if ($commentEnd === false
+        } elseif ($commentEnd === false
             || $tokens[$commentEnd]['code'] !== T_DOC_COMMENT
         ) {
             $phpcsFile->addError("Missing $type doc comment", $stackPtr);
+
             return;
         }
 
         $commentStart = ($phpcsFile->findPrevious(T_DOC_COMMENT, ($commentEnd - 1), null, true) + 1);
-        $commentNext  = $phpcsFile->findPrevious(T_WHITESPACE, ($commentEnd + 1), $stackPtr, false, $phpcsFile->eolChar);
+        $commentNext = $phpcsFile->findPrevious(T_WHITESPACE, ($commentEnd + 1), $stackPtr, false, $phpcsFile->eolChar);
 
         // Distinguish file and class comment.
         $prevClassToken = $phpcsFile->findPrevious(T_CLASS, ($stackPtr - 1));
@@ -128,6 +131,7 @@ class Drupal_Sniffs_Commenting_ClassCommentSniff extends PEAR_Sniffs_Commenting_
                             // The doc block is most likely a file comment.
                             $error = "Missing $type doc comment";
                             $phpcsFile->addError($error, ($stackPtr + 1));
+
                             return;
                         }
                     }//end if
@@ -147,6 +151,7 @@ class Drupal_Sniffs_Commenting_ClassCommentSniff extends PEAR_Sniffs_Commenting_
         } catch (PHP_CodeSniffer_CommentParser_ParserException $e) {
             $line = ($e->getLineWithinComment() + $commentStart);
             $phpcsFile->addError($e->getMessage(), $line);
+
             return;
         }
 
@@ -154,15 +159,16 @@ class Drupal_Sniffs_Commenting_ClassCommentSniff extends PEAR_Sniffs_Commenting_
         if (is_null($comment) === true) {
             $error = ucfirst($type).' doc comment is empty';
             $phpcsFile->addError($error, $commentStart);
+
             return;
         }
 
         // No extra newline before short description.
-        $short        = $comment->getShortComment();
+        $short = $comment->getShortComment();
         $newlineCount = 0;
-        $newlineSpan  = strspn($short, $phpcsFile->eolChar);
+        $newlineSpan = strspn($short, $phpcsFile->eolChar);
         if ($short !== '' && $newlineSpan > 0) {
-            $line  = ($newlineSpan > 1) ? 'newlines' : 'newline';
+            $line = ($newlineSpan > 1) ? 'newlines' : 'newline';
             $error = "Extra $line found before $type comment short description";
             $phpcsFile->addError($error, ($commentStart + 1));
         }
@@ -172,7 +178,7 @@ class Drupal_Sniffs_Commenting_ClassCommentSniff extends PEAR_Sniffs_Commenting_
         // Exactly one blank line between short and long description.
         $long = $comment->getLongComment();
         if (empty($long) === false) {
-            $between        = $comment->getWhiteSpaceBetween();
+            $between = $comment->getWhiteSpaceBetween();
             $newlineBetween = substr_count($between, $phpcsFile->eolChar);
             if ($newlineBetween !== 2) {
                 $error = "There must be exactly one blank line between descriptions in $type comments";
@@ -199,9 +205,9 @@ class Drupal_Sniffs_Commenting_ClassCommentSniff extends PEAR_Sniffs_Commenting_
 
         // Check each tag.
         $this->processTags($commentStart, $commentEnd);
+    }
 
-    }//end process()
-
+//end process()
 
     /**
      * Process the version tag.
@@ -215,19 +221,16 @@ class Drupal_Sniffs_Commenting_ClassCommentSniff extends PEAR_Sniffs_Commenting_
         $version = $this->commentParser->getVersion();
         if ($version !== null) {
             $content = $version->getContent();
-            $matches = array();
+            $matches = [];
             if (empty($content) === true) {
                 $error = 'Content missing for @version tag in doc comment';
                 $this->currentFile->addError($error, $errorPos);
-            } else if ((strstr($content, 'Release:') === false)) {
+            } elseif ((strstr($content, 'Release:') === false)) {
                 $error = "Invalid version \"$content\" in doc comment; consider \"Release: <package_version>\" instead";
                 $this->currentFile->addWarning($error, $errorPos);
             }
         }
+    }
 
-    }//end processVersion()
-
-
+//end processVersion()
 }//end class
-
-?>

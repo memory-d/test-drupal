@@ -5,12 +5,14 @@
  * PHP version 5
  *
  * @category  PHP
- * @package   PHP_CodeSniffer
+ *
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
+ *
  * @version   CVS: $Id: FunctionCallArgumentSpacingSniff.php,v 1.8 2007/07/23 01:47:53 squiz Exp $
+ *
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 
@@ -20,18 +22,18 @@
  * Checks that calls to methods and functions are spaced correctly.
  *
  * @category  PHP
- * @package   PHP_CodeSniffer
+ *
  * @author    Greg Sherwood <gsherwood@squiz.net>
  * @author    Marc McIntyre <mmcintyre@squiz.net>
  * @copyright 2006 Squiz Pty Ltd (ABN 77 084 670 600)
  * @license   http://matrix.squiz.net/developer/tools/php_cs/licence BSD Licence
+ *
  * @version   Release: 1.2.0RC3
+ *
  * @link      http://pear.php.net/package/PHP_CodeSniffer
  */
 class Drupal_Sniffs_Functions_FunctionCallArgumentSpacingSniff implements PHP_CodeSniffer_Sniff
 {
-
-
     /**
      * Returns an array of tokens this test wants to listen for.
      *
@@ -39,10 +41,10 @@ class Drupal_Sniffs_Functions_FunctionCallArgumentSpacingSniff implements PHP_Co
      */
     public function register()
     {
-        return array(T_STRING);
+        return [T_STRING];
+    }
 
-    }//end register()
-
+//end register()
 
     /**
      * Processes this test, when one of its tokens is encountered.
@@ -62,7 +64,7 @@ class Drupal_Sniffs_Functions_FunctionCallArgumentSpacingSniff implements PHP_Co
         // function myFunction...
         // "myFunction" is T_STRING but we should skip because it is not a
         // function or method *call*.
-        $functionName    = $stackPtr;
+        $functionName = $stackPtr;
         $functionKeyword = $phpcsFile->findPrevious(PHP_CodeSniffer_Tokens::$emptyTokens, ($stackPtr - 1), null, true);
         if ($tokens[$functionKeyword]['code'] === T_FUNCTION || $tokens[$functionKeyword]['code'] === T_CLASS) {
             return;
@@ -78,10 +80,10 @@ class Drupal_Sniffs_Functions_FunctionCallArgumentSpacingSniff implements PHP_Co
         $closeBracket = $tokens[$openBracket]['parenthesis_closer'];
 
         $nextSeperator = $openBracket;
-        while (($nextSeperator = $phpcsFile->findNext(array(T_COMMA, T_VARIABLE), ($nextSeperator + 1), $closeBracket)) !== false) {
+        while (($nextSeperator = $phpcsFile->findNext([T_COMMA, T_VARIABLE], ($nextSeperator + 1), $closeBracket)) !== false) {
             // Make sure the comma or variable belongs directly to this function call,
             // and is not inside a nested function call or array.
-            $brackets    = $tokens[$nextSeperator]['nested_parenthesis'];
+            $brackets = $tokens[$nextSeperator]['nested_parenthesis'];
             $lastBracket = array_pop($brackets);
             if ($lastBracket !== $closeBracket) {
                 continue;
@@ -102,7 +104,7 @@ class Drupal_Sniffs_Functions_FunctionCallArgumentSpacingSniff implements PHP_Co
                     if (strpos($tokens[($nextSeperator + 1)]['content'], $phpcsFile->eolChar) === false) {
                         $space = strlen($tokens[($nextSeperator + 1)]['content']);
                         if ($space > 1) {
-                            $error  = 'Expected 1 space after comma in function call; ';
+                            $error = 'Expected 1 space after comma in function call; ';
                             $error .= $space.' found';
                             $phpcsFile->addError($error, $stackPtr);
                         }
@@ -126,10 +128,7 @@ class Drupal_Sniffs_Functions_FunctionCallArgumentSpacingSniff implements PHP_Co
                 }
             }//end if
         }//end while
+    }
 
-    }//end process()
-
-
+//end process()
 }//end class
-
-?>
