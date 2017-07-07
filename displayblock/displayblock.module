@@ -6,7 +6,7 @@
 function displayblock_entity_info_alter(&$entity_info) {
     $entity_info['node']['view modes']['block'] = array(
       'label' => t('block'),
-      'custom settings' => TRUE,
+      'custom settings' => true,
     );
     $entity_info['node']['view modes']['block_zero'] = array(
       'label' => t('Block Zero'),
