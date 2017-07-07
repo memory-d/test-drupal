@@ -1,13 +1,15 @@
 <?php
 
+
+
+
 /**
 * Implements hook_entity_info_alter().
 */
 function displayblock_entity_info_alter(&$entity_info) {$entity_info['node']['view modes']['block'] = array(
 'label' => t('block'),
 'custom settings' => TRUE,
-);
-   $entity_info['node']['view modes']['block_zero'] = array(
+);$entity_info['node']['view modes']['block_zero'] = array(
     'label' => t('Block Zero'),
     'custom settings' => TRUE,
   );
