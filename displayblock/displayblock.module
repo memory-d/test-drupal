@@ -1,18 +1,17 @@
 <?php
 
-
-
-
 /**
 * Implements hook_entity_info_alter().
 */
-function displayblock_entity_info_alter(&$entity_info) {$entity_info['node']['view modes']['block'] = array(
-'label' => t('block'),
-'custom settings' => TRUE,
-);$entity_info['node']['view modes']['block_zero'] = array(
-    'label' => t('Block Zero'),
-    'custom settings' => TRUE,
-  );
+function displayblock_entity_info_alter(&$entity_info) {
+    $entity_info['node']['view modes']['block'] = array(
+      'label' => t('block'),
+      'custom settings' => TRUE,
+    );
+    $entity_info['node']['view modes']['block_zero'] = array(
+      'label' => t('Block Zero'),
+      'custom settings' => TRUE,
+    );
    $entity_info['node']['view modes']['block_rss'] = array(
     'label' => t('Block RSS'),
     'custom settings' => TRUE,
@@ -50,13 +49,16 @@ function displayblock_entity_info_alter(&$entity_info) {$entity_info['node']['vi
 * Implements hook_preprocess_node().
 */
 function displayblock_preprocess_node(&$vars) {
-if($vars['view_mode'] == 'block') {
-$vars['theme_hook_suggestions'][] = 'node__' . $vars['type'] . '__block';
-}if($vars['view_mode'] == 'block_zero') {
-$vars['theme_hook_suggestions'][] = 'node__' . $vars['type'] . '__block_zero';}
-if($vars['view_mode'] == 'block_rss') {
-  $vars['theme_hook_suggestions'][] = 'node__' . $vars['type'] . '__block_rss';
+  if($vars['view_mode'] == 'block') {
+    $vars['theme_hook_suggestions'][] = 'node__' . $vars['type'] . '__block';
   }
+    if($vars['view_mode'] == 'block_zero') {
+      $vars['theme_hook_suggestions'][] = 'node__' . $vars['type'] . '__block_zero';}
+    
+    if($vars['view_mode'] == 'block_rss') {
+      $vars['theme_hook_suggestions'][] = 'node__' . $vars['type'] . '__block_rss';
+    }
+    
   if($vars['view_mode'] == 'block_step') {
     $vars['theme_hook_suggestions'][] = 'node__' . $vars['type'] . '__block_step';
   }
