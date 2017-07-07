@@ -1,0 +1,26 @@
+<documentation title="Function and Method Names">
+    <standard>
+    <![CDATA[
+    Functions should be named using lowercase, and words should be separated with an underscore. Functions should in addition have the grouping/module name as a prefix, to avoid name collisions between modules.
+    ]]>
+    </standard>
+    <code_comparison>
+        <code title="Examples of valid function names">
+        <![CDATA[
+xml_rpc_serialize_data()
+devel_init()
+devel_connect()
+variable_get()
+        ]]>
+        </code>
+        <code title="Examples of invalid function names">
+        <![CDATA[
+Connect()
+getSomeOtherStuff()
+connect()
+getData()
+buildSomeWidget()
+        ]]>
+        </code>
+    </code_comparison>
+</documentation>
