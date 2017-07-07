@@ -1,0 +1,11 @@
+<?php
+/**
+* @file
+* Contains install and update functions for social_realtime_counter.
+*/
+/**
+* Implements hook_uninstall().
+*/
+function social_realtime_counter_uninstall() {
+	variable_del('social_realtime_counter');
+}
