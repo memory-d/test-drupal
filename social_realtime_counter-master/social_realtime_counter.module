@@ -1,0 +1,13 @@
+<?php
+function social_realtime_counter_preprocess_node(&$variables) {
+	$main_urls = $GLOBALS['base_url'];
+    $url = $main_urls.'/'.request_path();
+    if ($variables['view_mode'] == 'full') { //check if is view_mode 
+           $node =& $variables['node'];
+    if ($node->type == 'article' || 'blog') { //define sub condition for content type
+	  	drupal_add_js(array('r_link' => array('urls' => $url )), 'setting');
+	    drupal_add_js(drupal_get_path('module', 'social_realtime_counter') . '/js/realtime.js'); //add js to module after check all condition
+	  //}
+    }
+ }
+}
